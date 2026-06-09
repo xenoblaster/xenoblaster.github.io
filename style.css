@@ -1,0 +1,39 @@
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Main content area */
+    .content {
+        margin-left: 210px; /* Space for left banner */
+        padding: 20px;
+    }
+
+    /* Side banner styling */
+    .side-banner {
+        position: fixed; /* Stays in place while scrolling */
+        top: 0;
+        left: 0; /* Change to right: 0; for right-side banner */
+        width: 200px;
+        height: 100%;
+        background-color: #ECBA25;
+        color: #127a1d;
+        text-align: center;
+        padding-top: 20px;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+    }
+
+    /* Banner links or content */
+    .side-banner a {
+        display: block;
+        color: rgb(0, 0, 0);
+        padding: 10px;
+        text-decoration: none;
+    }
+
+    .side-banner a:hover {
+        background-color: #1adc2d;
+        color: black;
+    }
+/* style.css */
+

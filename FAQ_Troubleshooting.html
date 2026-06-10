@@ -29,12 +29,13 @@
     <p>Make sure the cap is tight and the water bottle is completly sealed except for the nozzle to balance water pressure.</p>
     <h3>FAQ</h3>
     <select id="fruitSelect">
-        <option value="">-- Select a fruit --</option>
-        <option value="apple">Apple</option>
-        <option value="banana">Banana</option>
-        <option value="orange">Orange</option>
-        <option value="mango">Mango</option>
+        <option value="q0">Click for FAQ</option>
+        <option value="q1">Are Xenoblasters real weapons?</option>
+        <option value="q2">Are Xenoblasters harmful?</option>
+        <option value="q3">How do I put air back into a Xenoblaster chamber?</option>
+        <option value="q4">How do I prevent a Xenoblaster from leaking?</option>
     </select>
+    <p id="answer_here"></p>
 
     <h3>Other Issues</h3>
     <p>Use the text box below to report any issues you have not mentioned above.</p>
@@ -44,6 +45,21 @@
     <button type="submit">Report issue</button>
     </form>
 </div>
+<script>
+    const answers = {
+        q0: "Select a question above.",
+        q1: "Xenoblasters aren't real weapons.",
+        q2: "Unless you don't want to get wet, Xenoblasters aren't harmful at all.",
+        q3: "dunno, quickly fill it with air somehow",
+        q4: "Look for holes in the chamber, and use something strong (like flex tape) to stop leakage."
+    };
 
+    const select = document.getElementById("fruitSelect");
+    const answer = document.getElementById("answer_here");
+
+    select.addEventListener("change", function() {
+    answer.textContent = answers[this.value];
+    });
+</script>
 </body>
 </html>

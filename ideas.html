@@ -45,66 +45,66 @@
 </div>
 <script>
     const BIN_ID = "6a287bc1f5f4af5e29d4606f";
-const API_KEY = "$2a$10$cM4uXPOncQdEsxCA1AqJjeG7ffX9wKQIppDEcglmJ4iDHpVM29flG";
+    const API_KEY = "$2a$10$cM4uXPOncQdEsxCA1AqJjeG7ffX9wKQIppDEcglmJ4iDHpVM29flG";
 
-document.getElementById("submitIdeaBtn").addEventListener("click", submitIdea);
+    document.getElementById("submitIdeaBtn").addEventListener("click", submitIdea);
 
-async function submitIdea() {
-    const input = document.getElementById("ideaInput");
-    const idea = input.value.trim();
+    async function submitIdea() {
+        const input = document.getElementById("ideaInput");
+        const idea = input.value.trim();
 
-    if (!idea) {
-        alert("Please enter an idea.");
-        return;
-    }
-
-    try {
-        // Fetch current data
-        const getResponse = await fetch(
-            `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
-            {
-                headers: {
-                    "X-Master-Key": API_KEY
-                }
-            }
-        );
-
-        const data = await getResponse.json();
-
-        const ideas = Array.isArray(data.record.ideas)
-            ? data.record.ideas
-            : [];
-
-        ideas.push({
-            text: idea,
-            timestamp: new Date().toISOString()
-        });
-
-        // Save updated data
-        const updateResponse = await fetch(
-            `https://api.jsonbin.io/v3/b/${BIN_ID}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Master-Key": API_KEY
-                },
-                body: JSON.stringify({ ideas })
-            }
-        );
-
-        if (!updateResponse.ok) {
-            throw new Error("Failed to save idea.");
+        if (!idea) {
+            alert("Please enter an idea.");
+            return;
         }
 
-        alert("Idea submitted successfully!");
-        input.value = "";
+        try {
+            // Fetch current data
+            const getResponse = await fetch(
+                `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
+                {
+                    headers: {
+                        "X-Master-Key": API_KEY
+                    }
+                }
+            );
 
-    } catch (err) {
-        console.error(err);
-        alert("Error submitting idea.");
+            const data = await getResponse.json();
+
+            const ideas = Array.isArray(data.record.ideas)
+                ? data.record.ideas
+                : [];
+
+            ideas.push({
+                text: idea,
+                timestamp: new Date().toISOString()
+            });
+
+            // Save updated data
+            const updateResponse = await fetch(
+                `https://api.jsonbin.io/v3/b/${BIN_ID}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Master-Key": API_KEY
+                    },
+                    body: JSON.stringify({ ideas })
+                }
+            );
+
+            if (!updateResponse.ok) {
+                throw new Error("Failed to save idea.");
+            }
+
+            alert("Idea submitted successfully!");
+            input.value = "";
+
+        } catch (err) {
+            console.error(err);
+            alert("Error submitting idea.");
+        }
     }
-}
 </script>
 </body>
 </html>

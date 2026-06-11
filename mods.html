@@ -45,67 +45,118 @@
     <h2>Looking for a specific Xenoblaster? Check out our stats below!</h2>
     <p>statistic information is currently unavailable...</p>
     <hr>
-    <h2>tIR Calculator</h2>
-    <p>
-    Estimate the theoretical Inch Range (tIR) of an untested Xenoblaster.
-    Results are only approximations.
-    </p>
-
-    <label for="nozzle">Nozzle Type:</label>
+ 
     <select id="nozzle">
-        <option value="0">Standard Xenoblaster</option>
-        <option value="8">Xenotaser</option>
-        <option value="-3">Submech</option>
-        <option value="-5">Dual Submech</option>
+    <option value="standard">Standard Xenoblaster</option>
+    <option value="xenotaser">Xenotaser</option>
+    <option value="submech">Submech</option>
+    <option value="dualsubmech">Dual Submech</option>
     </select>
 
-    <br><br>
-
-    <label for="bottle">Bottle Size:</label>
-    <select id="bottle">
-        <option value="0">17 fl oz (Recommended)</option>
-        <option value="-2">Mini Bottle</option>
-        <option value="2">Large Bottle</option>
+    <select id="barrel">
+        <option value="none">No Barrel</option>
+        <option value="caprisun">Capri Sun Straw Barrel</option>
     </select>
 
-    <br><br>
+    <select id="chamber">
+        <option value="standard">Standard Chamber</option>
+        <option value="large">Large Chamber</option>
+        <option value="xenopistol">Xenopistol Chamber</option>
+    </select>
 
-    <label for="skill">User Skill:</label>
     <select id="skill">
         <option value="-3">Beginner</option>
         <option value="0">Average</option>
         <option value="3">Experienced</option>
     </select>
 
-    <br><br>
+    <button onclick="calculateTIR()">
+        Calculate
+    </button>
 
-    <button onclick="calculateTIR()">Calculate tIR</button>
-
-    <h3 id="tirResult">tIR: ?</h3>
+    <h3 id="blasterName"></h3>
+    <h3 id="tirResult"></h3>
+    <h3 id="tiriResult"></h3>
 
 </div>
 <script>
     function calculateTIR() {
 
-    let baseIR = 15;
+    // Base Xenoblaster
+    let tir = 15;
 
-    let nozzle =
-        parseInt(document.getElementById("nozzle").value);
+    // Read inputs
+    const nozzle =
+        document.getElementById("nozzle").value;
 
-    let bottle =
-        parseInt(document.getElementById("bottle").value);
+    const barrel =
+        document.getElementById("barrel").value;
 
-    let skill =
-        parseInt(document.getElementById("skill").value);
+    const chamber =
+        document.getElementById("chamber").value;
 
-    let tir = baseIR + nozzle + bottle + skill;
+    const skill =
+        parseInt(
+            document.getElementById("skill").value
+        );
 
+    let name = "Xenoblaster";
+
+    // Nozzle calculations
+    if (nozzle === "xenotaser") {
+        tir += 8;
+        name = "Xenotaser";
+    }
+
+    else if (nozzle === "submech") {
+        tir -= 3;
+        name = "Submech Xenoblaster";
+    }
+
+    else if (nozzle === "dualsubmech") {
+        tir -= 5;
+        name = "Dual Submech Xenoblaster";
+    }
+
+    // Barrel calculations
+    if (
+        nozzle === "xenotaser" &&
+        barrel === "caprisun"
+    ) {
+        tir += 5;
+        name = "Focused Xenoblaster";
+    }
+
+    // Chamber calculations
+    if (chamber === "large") {
+        tir += 2;
+    }
+
+    else if (chamber === "xenopistol") {
+        tir -= 2;
+        name = "Xenopistol";
+    }
+
+    // Skill bonus
+    tir += skill;
+
+    // Prevent weird values
     if (tir < 1) {
         tir = 1;
     }
 
+    // Calculate tIRi
+    let tiri = Math.round(tir * 1.2);
+
+    // Output
+    document.getElementById("blasterName").innerHTML =
+        "Classification: " + name;
+
     document.getElementById("tirResult").innerHTML =
         "tIR: " + tir + " inches";
+
+    document.getElementById("tiriResult").innerHTML =
+        "tIRi: " + tiri + " inches";
 }
 </script>
 

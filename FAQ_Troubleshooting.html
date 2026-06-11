@@ -38,12 +38,15 @@
     <p id="answer_here"></p>
 
     <h3>Other Issues</h3>
-    <p>Use the text box below to report any issues you have not mentioned above.</p>
-    <form action="issue-success.html" method="POST">
-    <label for="username">Other Issues:</label>
-    <input type="text" id="idea" name="idea-1" placeholder="Your issue..." required minlength="3" maxlength="250">
-    <button type="submit">Report issue</button>
-    </form>
+    <p>Use the text box below to report any issues you have that aren't already mentioned above.</p>
+    <div class="idea-box">
+    <input
+        type="text"
+        id="ideaInput"
+        placeholder="Report your issue..."
+    >
+    <button id="submitIdeaBtn">Submit Issue</button>
+    </div>
 </div>
 <script>
     const answers = {
@@ -60,6 +63,67 @@
     select.addEventListener("change", function() {
     answer.textContent = answers[this.value];
     });
+    const BIN_ID = "6a2acdcdda38895dfeae44f9";
+    const API_KEY = "$2a$10$cM4uXPOncQdEsxCA1AqJjeG7ffX9wKQIppDEcglmJ4iDHpVM29flG";
+
+    document.getElementById("submitIdeaBtn").addEventListener("click", submitIdea);
+
+    async function submitIdea() {
+        const input = document.getElementById("ideaInput");
+        const idea = input.value.trim();
+
+        if (!idea) {
+            alert("Please enter an idea.");
+            return;
+        }
+
+        try {
+            // Fetch current data
+            const getResponse = await fetch(
+                `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
+                {
+                    headers: {
+                        "X-Master-Key": API_KEY
+                    }
+                }
+            );
+
+            const data = await getResponse.json();
+
+            const ideas = Array.isArray(data.record.ideas)
+                ? data.record.ideas
+                : [];
+
+            ideas.push({
+                text: idea,
+                timestamp: new Date().toISOString()
+            });
+
+            // Save updated data
+            const updateResponse = await fetch(
+                `https://api.jsonbin.io/v3/b/${BIN_ID}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Master-Key": API_KEY
+                    },
+                    body: JSON.stringify({ ideas })
+                }
+            );
+
+            if (!updateResponse.ok) {
+                throw new Error("Failed to save issue.");
+            }
+
+            alert("Issue submitted successfully!");
+            input.value = "";
+
+        } catch (err) {
+            console.error(err);
+            alert("Error submitting issue.");
+        }
+    }
 </script>
 </body>
 </html>

@@ -44,8 +44,70 @@
     <p>The chamber (main bottle that stores water) of a Xenoblaster is extremely hard to modify and we have done almost no research on it.</p>
     <h2>Looking for a specific Xenoblaster? Check out our stats below!</h2>
     <p>statistic information is currently unavailable...</p>
-</div>
+    <hr>
+    <h2>tIR Calculator</h2>
+    <p>
+    Estimate the theoretical Inch Range (tIR) of an untested Xenoblaster.
+    Results are only approximations.
+    </p>
 
+    <label for="nozzle">Nozzle Type:</label>
+    <select id="nozzle">
+        <option value="0">Standard Xenoblaster</option>
+        <option value="8">Xenotaser</option>
+        <option value="-3">Submech</option>
+        <option value="-5">Dual Submech</option>
+    </select>
+
+    <br><br>
+
+    <label for="bottle">Bottle Size:</label>
+    <select id="bottle">
+        <option value="0">17 fl oz (Recommended)</option>
+        <option value="-2">Mini Bottle</option>
+        <option value="2">Large Bottle</option>
+    </select>
+
+    <br><br>
+
+    <label for="skill">User Skill:</label>
+    <select id="skill">
+        <option value="-3">Beginner</option>
+        <option value="0">Average</option>
+        <option value="3">Experienced</option>
+    </select>
+
+    <br><br>
+
+    <button onclick="calculateTIR()">Calculate tIR</button>
+
+    <h3 id="tirResult">tIR: ?</h3>
+
+</div>
+<script>
+    function calculateTIR() {
+
+    let baseIR = 15;
+
+    let nozzle =
+        parseInt(document.getElementById("nozzle").value);
+
+    let bottle =
+        parseInt(document.getElementById("bottle").value);
+
+    let skill =
+        parseInt(document.getElementById("skill").value);
+
+    let tir = baseIR + nozzle + bottle + skill;
+
+    if (tir < 1) {
+        tir = 1;
+    }
+
+    document.getElementById("tirResult").innerHTML =
+        "tIR: " + tir + " inches";
+}
+</script>
 
       
 

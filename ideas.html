@@ -16,7 +16,7 @@
     <a href="mods.html">Modifications</a>
     <a href="how-to-use.html">How to Use</a>
     <a href="ideas.html">Ideas</a>
-    <a href="contact.html">Community</a>
+    <a href="contact.html">Community/Events</a>
     <a href="FAQ_Troubleshooting.html">FAQ/Troubleshooting</a>
 </div>
 
@@ -25,11 +25,14 @@
     <img src="logo.png" width="750" height="150"/>
     <h1>Ideas</h1>
     <p>Use the text box below to send us any of your ideas on how we could improve our Xenoblasters.<br> User feedback means a lot to us, as we grow a lot slower on our own.</p>
-    <form action="idea-success.html" method="POST">
-    <label for="username">Ideas:</label>
-    <input type="text" id="idea" name="idea-1" placeholder="Enter your idea" required minlength="3" maxlength="250">
-    <button type="submit">Submit Idea</button>
-    </form>
+    <div class="idea-box">
+    <input
+        type="text"
+        id="ideaInput"
+        placeholder="Enter your idea..."
+    >
+    <button id="submitIdeaBtn">Submit Idea</button>
+    </div>
 
     <h3>Our Goals</h3>
     <li>Fuel Tank</li>
@@ -40,6 +43,68 @@
     <p>CPS 3200:</p>
     <img src="cps.png" width="500" height="375"/>
 </div>
+<script>
+    const BIN_ID = "6a287bc1f5f4af5e29d4606f";
+const API_KEY = "YOUR_JSONBIN_API_KEY";
 
+document.getElementById("submitIdeaBtn").addEventListener("click", submitIdea);
+
+async function submitIdea() {
+    const input = document.getElementById("ideaInput");
+    const idea = input.value.trim();
+
+    if (!idea) {
+        alert("Please enter an idea.");
+        return;
+    }
+
+    try {
+        // Fetch current data
+        const getResponse = await fetch(
+            `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
+            {
+                headers: {
+                    "X-Master-Key": API_KEY
+                }
+            }
+        );
+
+        const data = await getResponse.json();
+
+        const ideas = Array.isArray(data.record.ideas)
+            ? data.record.ideas
+            : [];
+
+        ideas.push({
+            text: idea,
+            timestamp: new Date().toISOString()
+        });
+
+        // Save updated data
+        const updateResponse = await fetch(
+            `https://api.jsonbin.io/v3/b/${BIN_ID}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Master-Key": API_KEY
+                },
+                body: JSON.stringify({ ideas })
+            }
+        );
+
+        if (!updateResponse.ok) {
+            throw new Error("Failed to save idea.");
+        }
+
+        alert("Idea submitted successfully!");
+        input.value = "";
+
+    } catch (err) {
+        console.error(err);
+        alert("Error submitting idea.");
+    }
+}
+</script>
 </body>
 </html>
